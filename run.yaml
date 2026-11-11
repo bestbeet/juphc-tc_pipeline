@@ -1,0 +1,29 @@
+
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: juphc-tc-pipeline-run-
+spec:
+  pipelineRef:
+    name: juphc-tc-pipeline
+
+  params:
+    - name: build-image
+      value: IMAGE_REGISTRY/IMAGE_NAME:latest
+    - name: repo-url
+      value: https://github.com/bestbeet/juphc-tc_pipeline.git
+    - name: branch
+      value: main
+
+  workspaces:
+    - name: pipeline-workspace
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi
+
+    - name: dockerconfig-ws
+      emptyDir: {}
